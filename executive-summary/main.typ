@@ -52,7 +52,7 @@ The merchant never sees your name, university, graduation date, or any personal 
 
 = 4. Technical Approach & Depth
 
-- *Tech Stack:* TypeScript/React browser wallet, backend service on AWS ECS/Fargate with Terraform for infrastructure, Ed25519 signatures with AWS KMS for key management.
+- *Tech Stack:* TypeScript/React browser wallet (web-based, works on any modern browser across Windows, Mac, Linux, Android, iOS), serverless backend using AWS Lambda functions with Terraform for infrastructure, ECDSA P-256 signatures with AWS KMS for key management.
 
 - *Cryptographic Complexity:* We use zero-knowledge SNARKs implemented with #link("https://docs.circom.io/")[Circom] circuits that compile to WebAssembly. The browser generates proofs using #link("https://github.com/iden3/snarkjs")[snarkjs]. The proof demonstrates "I have a valid credential from an accredited university AND it hasn't expired" without revealing the actual credential data.
 
@@ -64,17 +64,28 @@ Our USP is zero-knowledge verification. Proof without any data disclosure. Unlik
 
 We don't retain student data. OAuth confirms enrollment, we issue a signed credential directly to the student's browser, then we forget everything. No centralized database of student information.
 
-Unlike Apple's Digital ID (iOS-only, requires Apple API integration) or campus student IDs (requires bilateral university agreements for NFC infrastructure), we're platform-agnostic. ZK proofs work across web, mobile, desktop with standard HTTP APIs.
+Unlike Apple's Digital ID (iOS-only, requires Apple API integration) or campus student IDs (requires bilateral university agreements for NFC infrastructure), we're web-based and cross-platform. The wallet runs in any modern browser on any device. ZK proofs work across web, mobile, desktop with standard HTTP APIs.
 
 We're more private than Apple and don't need SheerID's data infrastructure.
 
 = 6. Broader Impact
 
-- *Economic:* Students stop surrendering driver's licenses for \$5 discounts. Merchants get simpler integration than multi-platform wallet implementations.
+- *Economic:* Students stop surrendering driver's licenses for \$5 discounts.
 
 - *Legal/Regulatory:* GDPR and CCPA both require data minimization. We collect less data than SheerID, so we're compliant by design. The EU passed a digital identity regulation in May 2024 that requires zero-knowledge proofs, which validates our technical approach and might influence future U.S. privacy laws.
 
 - *Technological:* Proves browser-based ZK cryptography works for consumer applications. The foundation extends beyond student verification to any attribute-based verification: age, employment status, professional licenses, where proof without disclosure is valuable.
+
+= 7. Limitations and Tradeoffs
+
+- *Credential Revocation*: We implement #link("https://www.w3.org/TR/vc-bitstring-status-list/")[W3C Bitstring Status Lists] for revocation. Students can revoke their own credentials by generating a ZK proof that demonstrates ownership, which our API verifies cryptographically before updating the status list. We also use time-based expiration (credentials valid for one semester) to handle normal lifecycle. This matches how SheerID works; they also don't dynamically revoke when students graduate mid-semester.
+
+- *Proof Generation Cost*: Generating ZK Proofs takes 2-5 seconds on modern devices. This is more compute-intensive than submitting a SheerID form. However, it is faster than uploading the document and waiting for manual approval. The computational cost shifts from servers to student's device.
+
+- *Browser Security vs Apple's hardware wallet*: Browser-based credentials storage is less secure than Apple's secure element. However, our architecture never transmits the credentials. Credentials always stay on the device, and only ZK proofs are sent. Even if someone compromises browser storage, they get only one student's credentials, not a centralized database of millions. Apple's approach is more secure, but their selective disclosure still sends identity data. We trade hardware-level security for zero data disclosure.  
+
+- *Trust*: Merchants trust our mechanism through cryptographic verification, not reputation. The ZK proof is mathematically verifiable using our public key; if it verifies, the credential was genuinely issued by us and hasn't been tampered with. We only issue credentials after university OAuth confirms enrollment, so we're not the source of truth, universities are. Merchants can audit our public key and verification code for transparency. SheerID offers broader coverage through #link("https://www.sheerid.com/press-releases/sheerid-expands-identity-verification-platform-with-marketing-hub-and-dataconnectors-to-400-martech-solutions/")[200,000+ data sources] but requires collecting excessive student data. We offer cryptographic certainty with zero data collection. Initial adoption requires pilots with privacy-conscious brands.
+
 
 #pagebreak()
 
@@ -98,3 +109,4 @@ We're more private than Apple and don't need SheerID's data infrastructure.
 
 + Polygon ID Release 6: Dynamic Credentials Implementation. Polygon Labs, February 2024. #link("https://polygon.technology/blog/polygon-id-release-6-introducing-the-first-ever-implementation-of-dynamic-credentials")
 
++ Bitstring Status List v1.0. W3C Recommendation, May 2025. #link("https://www.w3.org/TR/vc-bitstring-status-list/")
