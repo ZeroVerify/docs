@@ -82,7 +82,6 @@
 
 ### 🟥 US-5: Prevent Proof Reuse
 
-
 ### As a verifier, I want each proof to be tied to a unique session or challenge, so that previously used proofs cannot be replayed.
 
 
@@ -126,3 +125,4 @@
 ### The system should be modular so components (issuance, proof generation, verification, replay protection) can be updated independently.
 ### The system should include operational logging and monitoring to support debugging and maintenance without logging PII.
 ### The system should allow policy updates (ex. replay protection rules) without requiring major redesign.
+
