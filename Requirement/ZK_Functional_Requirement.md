@@ -3,126 +3,155 @@
 ## USE CASES
 
 ### UC-1: Issue Digital Credential
+**Primary Actor:** ZeroVerify (Issuer Service)
 
-### **Primary Actor**: Issuer (Government / University)
+**Description:**
+The user requests a credential from ZeroVerify. The user authenticates with a trusted IdP (e.g., university, government, employer). The IdP provides verified attributes to ZeroVerify, and ZeroVerify generates a digital credential containing those attributes, signs it using a BBS signature, and delivers it to the user during the issuance session.
 
-**Description**:
-### The issuer creates a digital credential containing user attributes (e.g., age flags, student status) and signs it using a BBS signature before delivering it to the user.
+---
 
 ### UC-2: Request Attribute Proof
-
-### **Primary Actor:** Verifier (Store / Website / Service)
-
-**Description:**
-### The verifier requests proof of a specific attribute (e.g., over 21 or student status) by sending a proof request containing required claims and a session nonce.
-
-### UC-3: Approve Proof Request
-
-### **Primary Actor:** User
+**Primary Actor:** Verifier (Store / Website / Service)
 
 **Description:**
-### The user reviews the verifier’s request, selects the attribute to disclose, and consents to generate a zero-knowledge proof derived from the BBS-signed credential.
+The verifier requests proof of a supported proof type (e.g., over 21 or student status) by sending a challenge that includes the proof type and a fresh session identifier.
 
-### UC-4: Generate ZK Proof 
+---
 
-### **Primary Actor:** User
-
-**Description:**
-### The system generates a zero-knowledge proof of possession of a valid BBS-signed credential while revealing only the requested attribute and hiding all other identity information.
-
-### UC-5: Verify Proof
-
-### **Primary Actor:** Verifier
+### UC-3: Review Request, Consent, and Generate ZK Proof
+**Primary Actor:** User
 
 **Description:**
-### The verifier validates the received proof using the issuer’s public key and the session nonce, then receives a verification result (Valid / Invalid).
+The user reviews the verifier’s challenge, sees what proof type is being requested and what attribute(s) it reveals, and approves or denies proof generation. If approved, the system generates a zero-knowledge proof of possession of a valid BBS-signed credential that reveals only the attribute(s) required by that proof type and hides all other identity information.
+
+---
+
+### UC-4: Verify Proof (including revocation check)
+**Primary Actor:** Verifier
+
+**Description:**
+The verifier submits the proof for verification and receives a result. The verification process accepts a proof only if it is cryptographically valid and the referenced credential is not revoked (if revocation is supported). The verifier rejects proofs that are invalid, malformed, expired/out-of-policy, or tied to a revoked credential.
+
+---
 
 ## FUNCTIONAL REQUIREMENTS
 
 ### Zero-Knowledge Identity System (BBS Signatures)
 
-### 🔵 FR-1: Credential Issuance
+### FR-1: Credential Issuance
+The system shall allow a user to request a digital credential.
+The system shall require the user to authenticate with a trusted IdP, and shall accept verified attributes from that IdP.
+The system shall generate a digital credential containing verified attributes and sign it using a BBS signature.
+The credential format should follow an existing standard (e.g., W3C Verifiable Credentials) for interoperability.
+The system shall deliver the signed credential to the user during the issuance session.
 
-### The system shall allow a trusted issuer to issue a digital credential containing multiple identity attributes and sign it using a BBS signature.
+---
 
-### 🟢 FR-2: Selective Disclosure Proof Generation
+### FR-2: Selective Disclosure Proof Generation
+The system shall allow a user to generate a zero-knowledge proof of possession of a valid BBS-signed credential.
+The system shall reveal only the attribute(s) required by the requested proof type and hide all other identity information.
+The system shall support proof generation only for predefined proof types (e.g., student status, over 21), rather than arbitrary user-selected attributes.
 
-### The system shall allow a user to generate a zero-knowledge proof of possession of a valid BBS-signed credential while revealing only the requested attribute and hiding all other identity information.
+---
 
-### 🟡 FR-3: User Consent and Attribute Selection
+### FR-3: User Consent and Proof-Type Review
+The system shall allow the user to review a verifier’s challenge before any proof is generated.
+The system shall display the requested proof type and the attribute set that will be revealed by that proof type.
+The system shall allow the user to approve or deny proof generation based on the disclosed attribute set.
 
-### The system shall allow the user to review a verifier’s proof request and explicitly approve or deny the disclosure of specific attributes before any proof is generated.
+---
 
+### FR-4: Proof Verification and Result Criteria
+The system shall provide a verification function/interface that allows a verifier to validate a submitted zero-knowledge proof.
+The system shall accept a proof only when the proof is valid and any required revocation checks pass (if revocation is supported).
+The system shall reject proofs that are cryptographically invalid, malformed, or associated with a revoked credential.
+The system shall return a clear verification outcome (Accepted or Rejected).
 
-### 🟣 FR-4: Proof Verification
+---
 
-### The system shall allow a verifier to cryptographically validate a submitted zero-knowledge proof and receive only a verification result (Valid or Invalid)
+### FR-5: Session Binding and Replay Protection
+The system shall bind each proof to a verifier-provided challenge/session identifier so the proof cannot be reused across different verification attempts.
+The system shall require a fresh verifier challenge/session identifier for each verification attempt.
 
-### 🔴 FR-5: Session Binding and Replay Protection
-### The system shall bind each zero-knowledge proof to a verifier-provided challenge or session identifier to prevent proof reuse across different verification attempts.
+---
 
+### FR-6: Proof Generation Failure Handling
+The system shall detect and reject proof generation when required conditions are not met (e.g., expired credential, unsupported proof type, missing required attributes).
+The system shall return a clear failure message and shall not produce a proof in those cases.
 
-## User Stories
+---
 
-### 🟦 US-1: Receive Digital Credential
+## USER STORIES
 
-## As a user, I want to receive a digitally signed credential from a trusted issuer, so that I can later prove identity attributes without showing my physical ID.
+### US-1: Receive Digital Credential
+As a user, I want to receive a digitally signed credential from ZeroVerify after authenticating with a trusted issuer/IdP, so that I can later prove identity attributes without showing my physical ID.
 
-### 🟩 US-2: Prove an Attribute with Selective Disclosure
+### US-2: Prove an Attribute with Selective Disclosure
+As a user, I want to generate a zero-knowledge proof for a supported proof type that reveals only the required attribute(s), so that my other personal information remains private.
 
-## As a user, I want to generate a zero-knowledge proof that reveals only a required attribute (such as being over 21), so that my other personal information remains private.
+### US-3: Control Consent and Disclosure
+As a user, I want to review a verifier’s request and approve or deny proof generation before anything is shared, so that I stay in control of what attribute(s) are disclosed.
 
-### 🟨 US-3: Control Consent and Disclosure
+### US-4: Verify a Proof as a Service Provider
+As a verifier, I want to validate a submitted proof and receive an Accepted or Rejected result, so that I can enforce policies without collecting personal data.
 
-### As a user, I want to review and approve proof requests before any information is shared, so that I stay in control of what attributes are disclosed.
+### US-5: Prevent Proof Reuse
+As a verifier, I want each proof to be tied to a unique challenge/session identifier, so that previously used proofs cannot be replayed.
 
-### 🟪 US-4: Verify a Proof as a Service Provider
-
-### As a verifier, I want to validate a zero-knowledge proof and receive only a Valid or Invalid result, so that I can enforce policies without collecting personal data.
-
-### 🟥 US-5: Prevent Proof Reuse
-
-### As a verifier, I want each proof to be tied to a unique session or challenge, so that previously used proofs cannot be replayed.
-
+---
 
 ## NON-FUNCTIONAL REQUIREMENTS
 
-### 🟢 NFR-1: Security
-### The system shall protect credentials, proofs, and keys using secure storage and encrypted communication channels.
-### The system shall ensure only authorized actors can request, generate, or verify proofs.
-### The system shall prevent credential/proof tampering and detect invalid or modified proofs during verification.
-### The system should support secure key management practices such as key rotation and least-privilege access.
+### NFR-1: Security
+The system shall protect credentials, proofs, and keys in storage and during transmission.
+The system shall ensure only authorized actors can request credentials, generate proofs, or verify proofs.
+The system shall detect and reject tampered, invalid, or malformed proofs during verification.
+The system should support secure key management practices such as key rotation and least-privilege access.
 
-### 🟢 NFR-2: Privacy
-### The system shall minimize data collection and avoid centralized storage of raw personal identity information.
-### The system shall support selective disclosure by revealing only the requested attribute(s) and hiding all other identity data.
-### The system should reduce linkability across verification sessions to limit tracking across verifiers.
+---
 
-### 🟢 NFR-3: Performance
-### The system should generate zero-knowledge proofs within a few seconds under normal load.
-### The system should allow verifiers to validate proofs quickly enough for real-time checkout/discount flows.
+### NFR-2: Privacy
+The system shall avoid centralized storage of raw personal identity data when possible.
+The system shall support selective disclosure by revealing only the attribute(s) required by the requested proof type.
+The system should reduce linkability across verification sessions to limit tracking across verifiers.
 
-### 🟢 NFR-4: Scalability
-### The system should support growth in the number of users, issuers, and verifiers without significant performance degradation.
-### The system should scale verification workloads to handle concurrent proof requests and validations.
-### If revocation or fraud controls are implemented, the mechanism should remain efficient at large scale.
+---
 
-### 🟢 NFR-5: Usability
-### The system should provide a simple verification experience for users with minimal steps and clear consent prompts.
-### The system should provide a straightforward integration experience for verifiers with clear documentation and stable interfaces.
-### The system should provide clear, user-friendly error messages (e.g., unsupported issuer, expired session, invalid proof).
+### NFR-3: Performance
+The system should generate zero-knowledge proofs within a few seconds under normal load.
+The system should allow verifiers to validate proofs quickly enough for real-time checkout/discount flows.
 
-### 🟢 NFR-6: Reliability
-### The system should remain available and functional during verification requests and handle transient failures gracefully.
-### The system shall fail safely (ex. do not grant verification when proof generation/verification cannot be completed).
-### The system should preserve user access to credentials/proof generation even if non-critical services experience issues.
+---
 
-### 🟢 NFR-7: Interoperability
-### The system should align with W3C Verifiable Credential standards to maximize compatibility across platforms and ecosystems.
-### The system should support common authentication systems used by issuers (ex. OAuth/SSO) and work across major browsers/devices.
+### NFR-4: Scalability
+The system should support growth in the number of users, issuers/IdPs, and verifiers without significant performance degradation.
+The system should scale verification workloads to handle concurrent proof requests and validations.
+The system should keep verification and revocation-checking mechanisms efficient at large scale (if revocation is supported).
 
-### 🟢 NFR-8: Maintainability
-### The system should be modular so components (issuance, proof generation, verification, replay protection) can be updated independently.
-### The system should include operational logging and monitoring to support debugging and maintenance without logging PII.
-### The system should allow policy updates (ex. replay protection rules) without requiring major redesign.
+---
+
+### NFR-5: Usability
+The system should provide a simple verification experience for users with minimal steps and clear consent prompts.
+The system should provide a straightforward integration experience for verifiers with clear documentation and stable interfaces.
+The system should provide clear, user-friendly error messages (e.g., unsupported proof type, expired session, invalid proof).
+
+---
+
+### NFR-6: Reliability
+The system should remain available during verification requests and handle transient failures gracefully.
+The system shall fail safely (do not grant verification when proof generation or verification cannot be completed).
+The system should preserve user access to credential storage and proof generation even if non-critical services experience issues.
+
+---
+
+### NFR-7: Interoperability
+The system should align with W3C Verifiable Credential standards to maximize compatibility across platforms and ecosystems.
+The system should support common authentication systems used by issuers/IdPs (e.g., OAuth/SSO) and work across major browsers/devices.
+
+---
+
+### NFR-8: Maintainability
+The system should be modular so components (issuance, proof generation, verification, replay protection) can be updated independently.
+The system should include operational logging and monitoring to support debugging and maintenance without logging PII.
+The system should allow policy updates (e.g., supported proof types, replay protection rules) without requiring major redesign.
 
