@@ -62,10 +62,14 @@ The system shall allow the user to approve or deny proof generation based on the
 ---
 
 ### FR-4: Proof Verification and Result Criteria
-The system shall provide a verification function/interface that allows a verifier to validate a submitted zero-knowledge proof.
-The system shall accept a proof only when the proof is valid and any required revocation checks pass (if revocation is supported).
-The system shall reject proofs that are cryptographically invalid, malformed, or associated with a revoked credential.
-The system shall return a clear verification outcome (Accepted or Rejected).
+The system shall provide a verification interface/library that accepts a zero-knowledge proof along with all required public inputs for the proof's circuit.
+The interface/library shall return:
+1. Cryptographic validity status (valid or invalid)
+2. Error information for invalid cases (malformed proof, cryptographically invalid)
+
+The interface/library shall provide utilities to check credential revocation status against the system's published revocation lists.
+
+Verifiers integrate this library to validate proofs and make accept/reject decisions based on the validity results and revocation status.
 
 ---
 
@@ -126,7 +130,7 @@ The system should allow verifiers to validate proofs quickly enough for real-tim
 ### NFR-4: Scalability
 The system should support growth in the number of users, issuers/IdPs, and verifiers without significant performance degradation.
 The system should scale verification workloads to handle concurrent proof requests and validations.
-The system should keep verification and revocation-checking mechanisms efficient at large scale (if revocation is supported).
+The system should keep verification and revocation-checking mechanisms efficient at large scale.
 
 ---
 
