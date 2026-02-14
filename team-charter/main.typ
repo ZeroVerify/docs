@@ -16,23 +16,17 @@
   ]
   #v(0.3em)
   #text(size: 9pt)[
-    Version 1.0 | Last Updated: January 2025
+    Version 1.1 | Last Updated: February 2025
   ]
 ]
 
-= Team Composition & Roles
+= Team Members
 
-#table(
-  columns: (1fr, 2fr),
-  [*Member*], [*Role*],
-  [Lisa Nguyen], [TBD],
-  [Anton Sakhanovych], [TBD],
-  [Souleymane Sono], [TBD],
-  [Fateha Ima], [TBD],
-  [Simon Griemert], [TBD],
-)
-
-*Scrum Master Rotation:* Role rotates bi-weekly starting Sprint 1. Responsibilities include maintaining GitHub project board, facilitating meetings, and tracking blockers.
+- Lisa Nguyen
+- Anton Sakhanovych
+- Souleymane Sono
+- Fateha Ima
+- Simon Griemert
 
 = Communication Protocol
 
@@ -55,9 +49,11 @@
 
 = Meeting Schedule
 
+All meeting times are arranged and agreed upon in the Discord group channel to accommodate team members' schedules.
+
 == Sprint Structure (2-week iterations)
 
-*Sprint Planning* (every other X, Time TBD, 60 minutes)
+*Sprint Planning* 
 - Review completed work from previous sprint
 - Select user stories for upcoming sprint
 - Break stories into tasks and assign ownership
@@ -67,7 +63,7 @@
 - What am I working on today?
 - Am I blocked? If yes, what specifically blocks me? How can team help to unblock you?
 
-*Backlog Refinement* (every other Y, Time TBD, 30 minutes)
+*Backlog Refinement* 
 - Clarify upcoming user stories
 - Estimate story points
 - Demo completed features (working code only)
@@ -294,3 +290,52 @@ After any conflict resolution:
     The North remembers. So does your Git history. Be kind.
   ]
 ]
+
+#pagebreak()
+
+#heading(numbering: none)[Signatures]
+
+By signing below, all team members acknowledge they have read, understood, and agree to abide by the terms outlined in this Team Charter.
+
+#v(2em)
+
+#grid(
+  columns: (1fr, 1fr),
+  row-gutter: 3em,
+  column-gutter: 2em,
+
+  [
+    #line(length: 100%, stroke: 0.5pt)
+    Lisa Nguyen
+    #v(0.5em)
+    Date: #h(1fr)
+  ],
+
+  [
+    #line(length: 100%, stroke: 0.5pt)
+    Anton Sakhanovych
+    #v(0.5em)
+    Date: #h(1fr)
+  ],
+
+  [
+    #line(length: 100%, stroke: 0.5pt)
+    Souleymane Sono
+    #v(0.5em)
+    Date: #h(1fr)
+  ],
+
+  [
+    #line(length: 100%, stroke: 0.5pt)
+    Fateha Ima
+    #v(0.5em)
+    Date: #h(1fr)
+  ],
+
+  [
+    #line(length: 100%, stroke: 0.5pt)
+    Simon Griemert
+    #v(0.5em)
+    Date: #h(1fr)
+  ],
+)
