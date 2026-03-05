@@ -11,6 +11,7 @@ DOC_SOURCES := $(wildcard */main.typ)
 DOC_DIRS := $(patsubst %/main.typ,%,$(DOC_SOURCES))
 DOC_PDFS := $(patsubst %/main.typ,$(OUTPUT_DIR)/%.pdf,$(DOC_SOURCES))
 DOC_HTMLS := $(patsubst %/main.typ,$(OUTPUT_DIR)/%.html,$(DOC_SOURCES))
+DOC_MDS := $(patsubst %/main.typ,$(OUTPUT_DIR)/%.md,$(DOC_SOURCES))
 
 # Default target: build all documents
 .PHONY: all
@@ -18,6 +19,9 @@ all: $(DOC_PDFS)
 
 .PHONY: html
 html: $(DOC_HTMLS)
+
+.PHONY: markdown
+markdown: $(DOC_MDS)
 
 # Create output directory
 $(OUTPUT_DIR):
@@ -29,6 +33,9 @@ $(OUTPUT_DIR)/%.pdf: %/main.typ | $(OUTPUT_DIR)
 
 $(OUTPUT_DIR)/%.html: %/main.typ | $(OUTPUT_DIR)
 	$(TYPST) compile --features html --format html $< $@
+
+$(OUTPUT_DIR)/%.md: %/main.typ | $(OUTPUT_DIR)
+	pandoc -f typst -t markdown $< -o $@
 
 .PHONY: $(DOC_DIRS)
 $(DOC_DIRS): %: $(OUTPUT_DIR)/%.pdf
