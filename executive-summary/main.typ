@@ -76,22 +76,22 @@ Unlike Apple's Digital ID (iOS-only, requires Apple API integration) or institut
 
 = References
 
-+ Student Discount Platforms Market Research Report. Growth Market Reports. #link("https://growthmarketreports.com/report/student-discount-platforms-market")
++ Student Discount Platforms Market Research Report. Growth Market Reports. #link("https://growthmarketreports.com/report/student-discount-platforms-market")[link]
 
-+ SheerID Software Pricing and Business Model. Vendr. #link("https://www.vendr.com/buyer-guides/sheerid")
++ SheerID Software Pricing and Business Model. Vendr. #link("https://www.vendr.com/buyer-guides/sheerid")[link]
 
-+ Apple introduces Digital ID, a new way to create and present an ID in Apple Wallet. Apple Newsroom, November 2025. #link("https://www.apple.com/newsroom/2025/11/apple-introduces-digital-id-a-new-way-to-create-and-present-an-id-in-apple-wallet/")
++ Apple introduces Digital ID, a new way to create and present an ID in Apple Wallet. Apple Newsroom, November 2025. #link("https://www.apple.com/newsroom/2025/11/apple-introduces-digital-id-a-new-way-to-create-and-present-an-id-in-apple-wallet/")[link]
 
-+ Google Wallet Adds Digital ID Support and Expands its Reach. PaymentsJournal. #link("https://www.paymentsjournal.com/google-wallet-adds-digital-id-support-and-expands-its-reach/")
++ Google Wallet Adds Digital ID Support and Expands its Reach. PaymentsJournal. #link("https://www.paymentsjournal.com/google-wallet-adds-digital-id-support-and-expands-its-reach/")[link]
 
-+ Student IDs on iPhone and Apple Watch expand to Canada and more US universities. Apple Newsroom, August 2021. #link("https://www.apple.com/newsroom/2021/08/student-ids-on-iphone-and-apple-watch-expand-to-canada-and-more-us-universities/")
++ Student IDs on iPhone and Apple Watch expand to Canada and more US universities. Apple Newsroom, August 2021. #link("https://www.apple.com/newsroom/2021/08/student-ids-on-iphone-and-apple-watch-expand-to-canada-and-more-us-universities/")[link]
 
-+ Circom: A Circuit Compiler for Zero-Knowledge Proofs. Documentation. #link("https://docs.circom.io/")
++ Circom: A Circuit Compiler for Zero-Knowledge Proofs. Documentation. #link("https://docs.circom.io/")[link]
 
-+ snarkjs: JavaScript implementation of zkSNARK schemes. GitHub - iden3. #link("https://github.com/iden3/snarkjs")
++ snarkjs: JavaScript implementation of zkSNARK schemes. GitHub - iden3. #link("https://github.com/iden3/snarkjs")[link]
 
-+ Verifiable Credentials Data Model 2.0. W3C Recommendation, May 2025. #link("https://www.w3.org/TR/vc-data-model-2.0/")
++ Verifiable Credentials Data Model 2.0. W3C Recommendation, May 2025. #link("https://www.w3.org/TR/vc-data-model-2.0/")[link]
 
-+ Polygon ID Release 6: Dynamic Credentials Implementation. Polygon Labs, February 2024. #link("https://polygon.technology/blog/polygon-id-release-6-introducing-the-first-ever-implementation-of-dynamic-credentials")
++ Polygon ID Release 6: Dynamic Credentials Implementation. Polygon Labs, February 2024. #link("https://polygon.technology/blog/polygon-id-release-6-introducing-the-first-ever-implementation-of-dynamic-credentials")[link]
 
-+ Bitstring Status List v1.0. W3C Recommendation, May 2025. #link("https://www.w3.org/TR/vc-bitstring-status-list/")
++ Bitstring Status List v1.0. W3C Recommendation, May 2025. #link("https://www.w3.org/TR/vc-bitstring-status-list/")[link]

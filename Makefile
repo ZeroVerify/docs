@@ -35,7 +35,7 @@ $(OUTPUT_DIR)/%.html: %/main.typ | $(OUTPUT_DIR)
 	$(TYPST) compile --features html --format html $< $@
 
 $(OUTPUT_DIR)/%.md: %/main.typ | $(OUTPUT_DIR)
-	pandoc -f typst -t markdown $< -o $@
+	pandoc -f typst -t gfm-raw_html $< -o $@
 
 .PHONY: $(DOC_DIRS)
 $(DOC_DIRS): %: $(OUTPUT_DIR)/%.pdf
