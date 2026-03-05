@@ -72,17 +72,6 @@ Unlike Apple's Digital ID (iOS-only, requires Apple API integration) or institut
 
 - *Technological:* Proves browser-based ZK cryptography works for consumers. Extends to any attribute verification (age, employment, licensure) where proof without disclosure is valuable.
 
-= 7. Limitations and Tradeoffs
-
-- *Credential Revocation*: We implement #link("https://www.w3.org/TR/vc-bitstring-status-list/")[W3C Bitstring Status Lists] rather than PKI mechanisms (CRL/OCSP) because bitstrings preserve verification privacy. #link("https://datatracker.ietf.org/doc/html/rfc5280")[CRL] requires merchants to download lists of revoked credential identifiers, creating linkability. #link("https://en.wikipedia.org/wiki/Online_Certificate_Status_Protocol")[OCSP] requires real-time queries with credential identifiers, exposing verification patterns. Bitstrings encode revocation as bit positions in a compressed list; merchants fetch the bitstring, check the relevant bit locally, reveal nothing about which credential they're verifying. Users self-revoke by generating ZK proofs of credential ownership. Time-based expiration handles normal lifecycle without revocation overhead.
-
-- *Proof Generation Cost*: Generating ZK Proofs takes 2-5 seconds on modern devices. This is more compute-intensive than submitting a SheerID form. However, it is faster than uploading the document and waiting for manual approval. The computational cost shifts from servers to user's device.
-
-- *Browser Security vs Apple's hardware wallet*: Browser-based credentials storage is less secure than Apple's secure element. However, our architecture never transmits the credentials. Credentials always stay on the device, and only ZK proofs are sent. Even if someone compromises browser storage, they get only one user's credentials, not a centralized database of millions. Apple's approach is more secure, but their selective disclosure still sends identity data. We trade hardware-level security for zero data disclosure.  
-
-- *Trust*: Merchants trust our mechanism through cryptographic verification, not reputation. The ZK proof is mathematically verifiable using our public key; if it verifies, the credential was genuinely issued by us and hasn't been tampered with. We issue credentials only after OAuth confirmation from the authoritative source; the issuer is the source of truth, not us. Merchants can audit our public key and verification code for transparency. SheerID offers broader coverage through #link("https://www.sheerid.com/press-releases/sheerid-expands-identity-verification-platform-with-marketing-hub-and-dataconnectors-to-400-martech-solutions/")[200,000+ data sources] but requires collecting excessive user data. We offer cryptographic certainty with zero data collection. Initial adoption requires pilots with privacy-conscious brands.
-
-
 #pagebreak()
 
 = References
