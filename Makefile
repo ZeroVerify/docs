@@ -10,10 +10,14 @@ TYPST := typst
 DOC_SOURCES := $(wildcard */main.typ)
 DOC_DIRS := $(patsubst %/main.typ,%,$(DOC_SOURCES))
 DOC_PDFS := $(patsubst %/main.typ,$(OUTPUT_DIR)/%.pdf,$(DOC_SOURCES))
+DOC_HTMLS := $(patsubst %/main.typ,$(OUTPUT_DIR)/%.html,$(DOC_SOURCES))
 
 # Default target: build all documents
 .PHONY: all
 all: $(DOC_PDFS)
+
+.PHONY: html
+html: $(DOC_HTMLS)
 
 # Create output directory
 $(OUTPUT_DIR):
@@ -23,9 +27,14 @@ $(OUTPUT_DIR):
 $(OUTPUT_DIR)/%.pdf: %/main.typ | $(OUTPUT_DIR)
 	$(TYPST) compile $< $@
 
-# Dynamic targets for individual documents
+$(OUTPUT_DIR)/%.html: %/main.typ | $(OUTPUT_DIR)
+	$(TYPST) compile --features html --format html $< $@
+
 .PHONY: $(DOC_DIRS)
 $(DOC_DIRS): %: $(OUTPUT_DIR)/%.pdf
+
+.PHONY: $(addprefix html-,$(DOC_DIRS))
+$(addprefix html-,$(DOC_DIRS)): html-%: $(OUTPUT_DIR)/%.html
 
 # Dynamic watch targets
 .PHONY: $(addprefix watch-,$(DOC_DIRS))
@@ -52,13 +61,17 @@ help:
 	@echo "  make [target]"
 	@echo ""
 	@echo "General targets:"
-	@echo "  all      - Compile all documents (default)"
+	@echo "  all      - Compile all documents to PDF (default)"
+	@echo "  html     - Compile all documents to HTML"
 	@echo "  list     - List all discovered documents"
 	@echo "  clean    - Remove output directory"
 	@echo "  help     - Display this help message"
 	@echo ""
-	@echo "Document-specific targets (auto-generated):"
+	@echo "Document-specific PDF targets (auto-generated):"
 	@$(foreach doc,$(DOC_DIRS),echo "  $(doc)";)
+	@echo ""
+	@echo "Document-specific HTML targets (auto-generated):"
+	@$(foreach doc,$(DOC_DIRS),echo "  html-$(doc)";)
 	@echo ""
 	@echo "Watch targets (auto-recompile on changes):"
 	@$(foreach doc,$(DOC_DIRS),echo "  watch-$(doc)";)
